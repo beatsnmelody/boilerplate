@@ -2,10 +2,10 @@
 const { Client } = require('pg');
 
 // change the DB_NAME string to whatever your group decides on
-const DB_NAME = 'univ-boilerplate';
+const DB_NAME = 'grace-shopper-dev';
 
 const DB_URL =
-  process.env.DATABASE_URL || `postgres://localhost:5432/${DB_NAME}`;
+  process.env.DATABASE_URL || `postgres://localhost:5432/grace-shopper-dev`;
 
 let client;
 
