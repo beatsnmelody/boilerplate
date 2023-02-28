@@ -31,6 +31,7 @@ async function buildTables() {
     await client.query(`
       CREATE TABLE products (
         id SERIAL PRIMARY KEY,
+        productName VARCHAR(255) NOT NULL,
         productCategory VARCHAR(255) NOT NULL,
         description VARCHAR NOT NULL,
         price INTEGER NOT NULL,
@@ -38,6 +39,7 @@ async function buildTables() {
       );
       CREATE TABLE cartItems(
         productId INTEGER REFERENCES products(id) NOT NULL,
+        productQuantity INTEGER NOT NULL,
         productImage VARCHAR REFERENCES products(productImage) NOT NULL,
         cartId INTEGER REFERENCES cart(id) NOT NULL
       );
@@ -54,6 +56,15 @@ async function buildTables() {
         phoneNumber INTEGER NOT NULL,
         isAdmin boolean NOT NULL
       );
+      CREATE TABLE reviews (
+        id SERIAL PRIMARY KEY,
+        productId INTEGER REFERENCES products(id) NOT NULL,
+        userId INTEGER REFERENCES users(id)NOT NULL,
+        title VARCHAR(255) NOT NULL,
+        description VARCHAR NOT NULL,
+        rating INTEGER NOT NULL,
+        isPublic boolean NOT NULL
+      );
       `);
     console.log("Finished building tables!");
   } catch (error) {
@@ -62,11 +73,80 @@ async function buildTables() {
   }
 }
 
+async function createInitialProducts() {
+  console.log("Starting to create products...");
+  try {
+    const productsToCreate = [
+      { 
+        productName: "Tiny Top Hat",
+        productCategory : "Lolita",
+        description : "What's better than a regular top hat? A tiny top hat!",
+        price: 20,
+        productImage: "/assets/tinytophat.avif"
+      },
+      { 
+        productName: "Alien Beanie",
+        productCategory : "Decora",
+        description : "A beanie imported from many light years away. May be sentient!",
+        price: 10,
+        productImage: "/assets/alienbeanie.jpg"
+      },
+      { 
+        productName: "Bubblegum Platform Heels",
+        productCategory : "Gyaru",
+        description : "Platforms as pink as a piece of bubblegum.",
+        price: 50,
+        productImage: "/assets/pinkplatformheels.webp"
+      },
+    ];
+    const products = await Promise.all(productsToCreate.map()); //insert route here
+    console.log("Products created:");
+    console.log();
+    console.log("Finished creating products!");
+  } catch (error) {
+    console.error("Error creating products!");
+    throw error;
+  }
+}
+
+async function createInitialUsers() {
+  console.log("Starting to create users...");
+  try {
+    const usersToCreate = [
+      { username: "loveharajuku",  
+      email: "sakurapetals@gmail.com", 
+      password: "123456789", 
+      phoneNumber: 7262037399, 
+      isAdmin: false},
+      { username: "scenequeen",  
+      email: "y2kdreams@gmail.com", 
+      password: "Xx_RANDOM_xX", 
+      phoneNumber: 2149270494, 
+      isAdmin: false},
+      { username: "glamgal",  
+      email: "ValleyGirl@yahoo.com", 
+      password: "glamgal123", 
+      phoneNumber: 9407369237, 
+      isAdmin: false},
+    ];
+    const users = await Promise.all(usersToCreate.map()); //insert route here
+
+    console.log("Users created:");
+    console.log(users);
+    console.log("Finished creating users!");
+  } catch (error) {
+    console.error("Error creating users!");
+    throw error;
+  }
+}
+
+async function createInitialReviews() {}
+
 async function populateInitialData() {
   try {
-    // create useful starting data by leveraging your
-    // Model.method() adapters to seed your db, for example:
-    // const user1 = await User.createUser({ ...user info goes here... })
+    await createInitialProducts();
+    await createInitialUsers();
+    await createInitialReviews();
   } catch (error) {
     throw error;
   }
