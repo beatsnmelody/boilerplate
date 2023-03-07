@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 // database functions
 
 // user functions
-async function createUser({ username, password }) {
+async function createUser({ username, email, password, phoneNumber, isAdmin }) {
   const SALT_COUNT = 10;
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
   try {
@@ -12,12 +12,12 @@ async function createUser({ username, password }) {
       rows: [user],
     } = await client.query(
       `
-      INSERT INTO users (username, password)
-      VALUES ($1, $2)
+      INSERT INTO users (username, email, password, phoneNumber, isAdmin)
+      VALUES ($1, $2, $3, $4, $5)
       ON CONFLICT (username) DO NOTHING
       RETURNING *
       `,
-      [username, hashedPassword]
+      [username, email, hashedPassword, phoneNumber, isAdmin]
     );
     user.password = null;
     return user;
@@ -26,8 +26,8 @@ async function createUser({ username, password }) {
   }
 }
 
-async function getUser({ username, password }) {
-  const user = await getUserByUsername(username);
+async function getUser({ username, email, password, phoneNumber, isAdmin }) {
+  const user = await getUserByUsername(username, email, phoneNumber, isAdmin);
   const hashedPassword = user.password;
 
   const isValid = await bcrypt.compare(password, hashedPassword);
@@ -51,12 +51,51 @@ async function getUserById(userId) {
   }
 }
 
-async function getUserByUsername(userName) {
+async function getUserByUsername(username) {
   try {
     const {
       rows: [user],
     } = await client.query(`SELECT * FROM users WHERE username = $1`, [
-      userName,
+      username,
+    ]);
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function getUserByEmail(email) {
+  try {
+    const {
+      rows: [user],
+    } = await client.query(`SELECT * FROM users WHERE email = $1`, [
+      email,
+    ]);
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function getUserByPhoneNumber(phoneNumber) {
+  try {
+    const {
+      rows: [user],
+    } = await client.query(`SELECT * FROM users WHERE phoneNumber = $1`, [
+      phoneNumber,
+    ]);
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function getUserByAdminStatus(isAdmin) {
+  try {
+    const {
+      rows: [user],
+    } = await client.query(`SELECT * FROM users WHERE isadmin = $1`, [
+      isAdmin,
     ]);
     return user;
   } catch (error) {
@@ -69,4 +108,7 @@ module.exports = {
   getUser,
   getUserById,
   getUserByUsername,
+  getUserByEmail,
+  getUserByPhoneNumber,
+  getUserByAdminStatus
 };

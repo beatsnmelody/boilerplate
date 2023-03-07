@@ -7,8 +7,6 @@ const DB_NAME = 'grace-shopper-dev';
 const DB_URL =
   process.env.DATABASE_URL || `postgres://localhost:5432/grace-shopper-dev`;
 
-let client;
-
 // github actions client config
 if (process.env.CI) {
   client = new Client({

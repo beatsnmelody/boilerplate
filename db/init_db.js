@@ -1,20 +1,22 @@
 const {
   client,
+  createProduct,
+  createUser,
+  createReview
   // declare your model imports here
   // for example, User
 } = require('./');
 
 async function dropTables() {
   try {
-    client.connect();
-
     // drop tables in correct order
     console.log("Starting to drop tables...");
     await client.query(`
-      DROP TABLE IF EXISTS products;
-      DROP TABLE IF EXISTS cartItems;
+      DROP TABLE IF EXISTS reviews;
+      DROP TABLE IF EXISTS "cartItems";
       DROP TABLE IF EXISTS cart;
       DROP TABLE IF EXISTS users;
+      DROP TABLE IF EXISTS products;
       `);
     console.log("Finished dropping tables!")
 
@@ -31,39 +33,39 @@ async function buildTables() {
     await client.query(`
       CREATE TABLE products (
         id SERIAL PRIMARY KEY,
-        productName VARCHAR(255) NOT NULL,
-        productCategory VARCHAR(255) NOT NULL,
-        description VARCHAR NOT NULL,
+        "productName" VARCHAR(255) NOT NULL,
+        "productCategory" VARCHAR(255) NOT NULL,
+        description TEXT NOT NULL,
         price INTEGER NOT NULL,
-        productImage VARCHAR NOT NULL
-      );
-      CREATE TABLE cartItems(
-        productId INTEGER REFERENCES products(id) NOT NULL,
-        productQuantity INTEGER NOT NULL,
-        productImage VARCHAR REFERENCES products(productImage) NOT NULL,
-        cartId INTEGER REFERENCES cart(id) NOT NULL
-      );
-      CREATE TABLE cart(
-        id SERIAL PRIMARY KEY,
-        userId INTEGER REFERENCES users(id) NOT NULL,
-        cartItem VARCHAR(255) NOT NULL
+        "productImage" TEXT NOT NULL
       );
       CREATE TABLE users(
         id SERIAL PRIMARY KEY,
         email VARCHAR(255) NOT NULL,
         username VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
-        phoneNumber INTEGER NOT NULL,
-        isAdmin boolean NOT NULL
+        "phoneNumber" INTEGER NOT NULL,
+        "isAdmin" boolean NOT NULL
+      );
+      CREATE TABLE cart(
+        id SERIAL PRIMARY KEY,
+        "userId" INTEGER REFERENCES users(id) NOT NULL
+      );
+      CREATE TABLE cartItems(
+        id SERIAL PRIMARY KEY,
+        "productId" INTEGER REFERENCES products(id) NOT NULL,
+        "productQuantity" INTEGER NOT NULL,
+        "productImage" TEXT NOT NULL,
+        "cartId" INTEGER REFERENCES cart(id) NOT NULL
       );
       CREATE TABLE reviews (
         id SERIAL PRIMARY KEY,
-        productId INTEGER REFERENCES products(id) NOT NULL,
-        userId INTEGER REFERENCES users(id)NOT NULL,
+        "productId" INTEGER REFERENCES products(id) NOT NULL,
+        "userId" INTEGER REFERENCES users(id)NOT NULL,
         title VARCHAR(255) NOT NULL,
-        description VARCHAR NOT NULL,
+        description TEXT NOT NULL,
         rating INTEGER NOT NULL,
-        isPublic boolean NOT NULL
+        "isPublic" boolean NOT NULL
       );
       `);
     console.log("Finished building tables!");
@@ -99,9 +101,9 @@ async function createInitialProducts() {
         productImage: "/assets/pinkplatformheels.webp"
       },
     ];
-    const products = await Promise.all(productsToCreate.map()); //insert route here
+    const products = await Promise.all(productsToCreate.map(createProduct)); //insert route here
     console.log("Products created:");
-    console.log();
+    console.log(products);
     console.log("Finished creating products!");
   } catch (error) {
     console.error("Error creating products!");
@@ -116,20 +118,20 @@ async function createInitialUsers() {
       { username: "loveharajuku",  
       email: "sakurapetals@gmail.com", 
       password: "123456789", 
-      phoneNumber: 7262037399, 
+      phoneNumber: 1, 
       isAdmin: false},
       { username: "scenequeen",  
       email: "y2kdreams@gmail.com", 
       password: "Xx_RANDOM_xX", 
-      phoneNumber: 2149270494, 
+      phoneNumber: 1, 
       isAdmin: false},
       { username: "glamgal",  
       email: "ValleyGirl@yahoo.com", 
       password: "glamgal123", 
-      phoneNumber: 9407369237, 
+      phoneNumber: 1, 
       isAdmin: false},
     ];
-    const users = await Promise.all(usersToCreate.map()); //insert route here
+    const users = await Promise.all(usersToCreate.map(createUser)); //insert route here
 
     console.log("Users created:");
     console.log(users);
@@ -140,7 +142,45 @@ async function createInitialUsers() {
   }
 }
 
-async function createInitialReviews() {}
+async function createInitialReviews() {
+  console.log("Starting to create reviews...");
+  try {
+    const reviewsToCreate = [
+      {
+      productId: 1,
+      userId: 1,
+      title: "The perfect fit for my cosplay",
+      description: "This top hat works very well for my Skullgirls cosplay! Very sturdy and cute.",
+      rating: 10/10,
+      isPublic: true
+      },
+      { 
+      productId: 2,
+      userId: 2,
+      title: "Misleading",
+      description: "This hat didn't become sentient, so I still don't have a wife :(",
+      rating: 0/10,
+      isPublic: true
+      },
+      { 
+      productId: 3,
+      userId: 3,
+      title: "OMG",
+      description: "LOVE THESE SHOES!! THE COLOR IS SO VIBRANT",
+      rating: 9/10,
+      isPublic: true
+      },
+    ];
+    const reviews = await Promise.all(reviewsToCreate.map(createReview)); //insert route here
+
+    console.log("Reviews created:");
+    console.log(reviews);
+    console.log("Finished creating reviews!");
+  } catch (error) {
+    console.error("Error creating reviews!");
+    throw error;
+  }
+}
 
 async function populateInitialData() {
   try {
