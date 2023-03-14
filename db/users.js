@@ -39,6 +39,14 @@ async function getUser({ username, email, password, phoneNumber, isAdmin }) {
   }
 }
 
+async function getAllUsers () {
+  const { rows } = await client.query(`
+  SELECT id, email, username, password, phoneNumber, isAdmin
+  FROM users; 
+  `)
+  return rows;
+}
+
 async function getUserById(userId) {
   try {
     const {
@@ -106,6 +114,7 @@ async function getUserByAdminStatus(isAdmin) {
 module.exports = {
   createUser,
   getUser,
+  getAllUsers,
   getUserById,
   getUserByUsername,
   getUserByEmail,

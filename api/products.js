@@ -6,7 +6,7 @@ const {
     getProductByCategory,
     getAllProducts
 } = require("../db");
-const { requireUser } = require("./utils");
+const { requireAdmin } = require("./utils");
 
 productsRouter.get("/", async (req, res, next) => {
     try {
@@ -17,16 +17,33 @@ productsRouter.get("/", async (req, res, next) => {
     }
 });
 
-productsRouter.post("/", requireUser, async (req, res, next) => {
-    const { id } = req.user;
+productsRouter.get("/:id", async (req, res, next) => {
+    try {
+        const productId = await getProductById(req.params.id);
+        res.send(productId);
+    } catch (error) {
+        next(error);
+    }
+});
+
+productsRouter.get("/:category", async (req, res, next) => {
+    try {
+        const productCategory = await getProductByCategory(req.params.category);
+        res.send(productCategory);
+    } catch (error) {
+        next(error);
+    }
+});
+
+productsRouter.post("/", requireAdmin, async (req, res, next) => {
     const { productName, productCategory, description, price, productImage} = req.body;
 
     try {
-        const creatorId = id;
-        const isAdmin = true;
         const newProduct = await createProduct({ productName, productCategory, description, price, productImage });
         res.send(newProduct);
     } catch (error) {
         next(error);
     }
 });
+
+module.exports = productsRouter;

@@ -115,6 +115,21 @@ async function createInitialUsers() {
   console.log("Starting to create users...");
   try {
     const usersToCreate = [
+      { username: "Claribelle",  
+      email: "conversationhearts@gmail.com", 
+      password: "CandyPower", 
+      phoneNumber: 12, 
+      isAdmin: true},
+      { username: "Sprite",  
+      email: "lemonlime@gmail.com", 
+      password: "MysteryAlien", 
+      phoneNumber: 13, 
+      isAdmin: true},
+      { username: "Natasha",  
+      email: "fashionista@gmail.com", 
+      password: "FashionIsta", 
+      phoneNumber: 14, 
+      isAdmin: true},
       { username: "loveharajuku",  
       email: "sakurapetals@gmail.com", 
       password: "123456789", 
@@ -123,12 +138,12 @@ async function createInitialUsers() {
       { username: "scenequeen",  
       email: "y2kdreams@gmail.com", 
       password: "Xx_RANDOM_xX", 
-      phoneNumber: 1, 
+      phoneNumber: 2, 
       isAdmin: false},
       { username: "glamgal",  
       email: "ValleyGirl@yahoo.com", 
       password: "glamgal123", 
-      phoneNumber: 1, 
+      phoneNumber: 3, 
       isAdmin: false},
     ];
     const users = await Promise.all(usersToCreate.map(createUser)); //insert route here
