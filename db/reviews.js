@@ -33,6 +33,24 @@ async function getAllReviews() {
     }
 }
 
+async function getReviewById(id) {
+  try {
+    const {
+      rows: [review],
+    } = await client.query(`
+      SELECT *
+      FROM reviews
+      WHERE id=${id}
+      `);
+    if (!review) {
+      return null;
+    }
+    return review;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function getAllPublicReviews() {
    try {
       const reviews = await getAllReviews();
@@ -126,6 +144,7 @@ async function deleteReview(id) {
 module.exports = {
    createReview,
    getAllReviews,
+   getReviewById,
    getAllPublicReviews,
    getAllReviewsByUser,
    getAllPublicReviewsByUser,

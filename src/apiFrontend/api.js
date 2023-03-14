@@ -74,3 +74,67 @@ export const createProducts = async (productName, productCategory, description, 
   const json = await res.json();
   return json;
 };
+
+export const fetchPublicReviews = async () => {
+  const res = await fetch(`${APIURL}/reviews`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = res.json();
+  return json;
+};
+
+export const createReview = async (productId, userId, title, description, rating,
+  isPublic) => {
+  const res = await fetch(`${APIURL}/reviews`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      productId: `${productId}`,
+      userId: `${userId}`,
+      title: `${title}`,
+      description: `${description}`,
+      rating: `${rating}`,
+      isPublic: `${isPublic}`,
+    }),
+  });
+  const json = await res.json();
+  return json;
+};
+
+export const editReview = async (productId, userId, title, description, rating,
+  isPublic) => {
+  const res = await fetch(`${APIURL}/reviews/${reviewId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      productId: `${productId}`,
+      userId: `${userId}`,
+      title: `${title}`,
+      description: `${description}`,
+      rating: `${rating}`,
+      isPublic: `${isPublic}`,
+    }),
+  });
+  const json = await res.json();
+  return json;
+};
+
+export const deleteReview = async (reviewId) => {
+  const res = await fetch(`${APIURL}/reviews/${reviewId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const json = await res.json();
+  return json;
+};
