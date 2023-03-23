@@ -1,4 +1,4 @@
-const APIURL = "http://localhost:4000/api";
+const APIURL = "https://grace-shopper-harajuku-rulez.onrender.com/api";
 const token = localStorage.getItem("token");
 //POST register user
 export const fetchRegister = async (username, email, password, phoneNumber) => {
