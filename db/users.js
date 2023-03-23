@@ -12,7 +12,7 @@ async function createUser({ username, email, password, phoneNumber, isAdmin }) {
       rows: [user],
     } = await client.query(
       `
-      INSERT INTO users (username, email, password, phoneNumber, isAdmin)
+      INSERT INTO users (username, email, password, "phoneNumber", "isAdmin")
       VALUES ($1, $2, $3, $4, $5)
       ON CONFLICT (username) DO NOTHING
       RETURNING *
@@ -41,7 +41,7 @@ async function getUser({ username, email, password, phoneNumber, isAdmin }) {
 
 async function getAllUsers () {
   const { rows } = await client.query(`
-  SELECT id, email, username, password, phoneNumber, isAdmin
+  SELECT id, email, username, password, "phoneNumber", "isAdmin"
   FROM users; 
   `)
   return rows;
@@ -89,7 +89,7 @@ async function getUserByPhoneNumber(phoneNumber) {
   try {
     const {
       rows: [user],
-    } = await client.query(`SELECT * FROM users WHERE phoneNumber = $1`, [
+    } = await client.query(`SELECT * FROM users WHERE "phoneNumber" = $1`, [
       phoneNumber,
     ]);
     return user;
@@ -102,7 +102,7 @@ async function getUserByAdminStatus(isAdmin) {
   try {
     const {
       rows: [user],
-    } = await client.query(`SELECT * FROM users WHERE isadmin = $1`, [
+    } = await client.query(`SELECT * FROM users WHERE "isAdmin" = $1`, [
       isAdmin,
     ]);
     return user;

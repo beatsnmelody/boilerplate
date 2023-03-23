@@ -1,4 +1,4 @@
-/* import fonts here */
+@import url("https://fonts.googleapis.com/css?family=Coiny");
 
 * {
   box-sizing: border-box;
@@ -19,24 +19,60 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  width: 100vw;
-  background-image: url("./../assets/bgplaceholder.gif");
+  width: 50vw;
+  background-image: url("./../assets/heartBgNew.gif");
 }
 
 .bdy{
+  display: flex;
+  flex-direction: row;
+  font-family: "Coiny";
   font-size: 20px;
-  color: azure;
+  color: darkblue;
 }
 
 .linkz{
-  color:aqua;
+  display: flex;
+  flex-direction: row;
+  font-family: "Coiny";
+  color: darkblue;
+  padding-right: 30px;
   font-size: 15px;
+  align-content: flex-end;
 }
 
 .header{
-  color: pink;
+  font-family: "Coiny";
+  color: black;
+  box-sizing: content-box;
+}
+
+.headerNav{
+  display: flex;
+  text-align: left;
+  font-family: "Coiny";
+  color: black;
 }
 
 .product{
-  color: aqua;
+  font-family: "Coiny";
+  color: darkblue;
+}
+
+.mascot{
+  display: flex;
+}
+
+.button{
+  display: flex;
+  font-family: "Coiny";
+  color: azure;
+  background-color: darkblue;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.lablez{
+  font-family: "Coiny";
+  color: darkblue;
 }

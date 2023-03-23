@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import background from "./../assets/catplaceholder.gif"
-import { NavLink } from "react-router-dom";
+import background from "./../assets/catplaceholder.gif";
 
 const Home = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);

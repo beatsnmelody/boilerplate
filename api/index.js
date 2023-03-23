@@ -51,12 +51,12 @@ const productsRouter = require("./products");
 apiRouter.use("/products", productsRouter);
 
 // ROUTER: /api/shoppingCart
-// const shoppingCartRouter = require("./shoppingCart");
-// apiRouter.use("/shoppingCart", shoppingCartRouter);
+const shoppingCartRouter = require("./shoppingCart");
+apiRouter.use("/shoppingCart", shoppingCartRouter);
 
 // ROUTER: /api/reviews
-// const reviewsRouter = require("./reviews");
-// apiRouter.use("/reviews", reviewsRouter);
+const reviewsRouter = require("./reviews");
+apiRouter.use("/reviews", reviewsRouter);
 
 apiRouter.use((error, req, res, next) => {
   res.send({

@@ -138,3 +138,88 @@ export const deleteReview = async (reviewId) => {
   const json = await res.json();
   return json;
 };
+
+export const createCart = async (userId) => {
+  const res = await fetch(`${APIURL}/shoppingCart`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      userId: `${userId}`,
+    }),
+  });
+  const json = await res.json();
+  return json;
+};
+
+export const createCartItems = async (productId, productPrice, productQuantity, productImage, cartId) => {
+  const res = await fetch(`${APIURL}/shoppingCart`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      productId: `${productId}`,
+      productPrice: `${productPrice}`,
+      productQuantity: `${productQuantity}`,
+      productImage: `${productImage}`,
+      cartId: `${cartId}`,
+    }),
+  });
+  const json = await res.json();
+  return json;
+};
+
+export const fetchCurrentCart = async () => {
+  const res = await fetch(`${APIURL}/shoppingCart`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = res.json();
+  return json;
+};
+
+export const fetchCartItems = async ({userId}) => {
+  const res = await fetch(`${APIURL}/shoppingCart`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const json = res.json();
+  return json;
+}
+
+export const editCart = async (productId, productPrice, productQuantity, productImage, cartId) => {
+  const res = await fetch(`${APIURL}/reviews/${cartId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      productId: `${productId}`,
+      productPrice: `${productPrice}`,
+      productQuantity: `${productQuantity}`,
+      productImage: `${productImage}`,
+      cartId: `${cartId}`,
+    }),
+  });
+  const json = await res.json();
+  return json;
+};
+
+export const deleteCart = async (cartId) => {
+  const res = await fetch(`${APIURL}/reviews/${cartId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const json = await res.json();
+  return json;
+};

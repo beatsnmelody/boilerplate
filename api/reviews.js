@@ -87,12 +87,12 @@ reviewsRouter.delete("/:reviewId", requireUser, async (req, res, next) => {
         const review = await getReviewById(reviewId);
         if (review && review.userId === req.user.id) {
             const reviewDelete = await deleteReview(reviewId);
-            res.send({ reviewDelete, ...routine });
+            res.send({ reviewDelete, ...review });
         } else if (review.createdBy !== currentUser.id) {
             res.status(403);
             next({
                 error: "Error",
-                message: `User ${req.user.username} is not allowed to delete On even days`,
+                message: `User ${req.user.username} is not allowed to delete a review`,
                 name: "Error",
             });
         }

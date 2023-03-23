@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { fetchAllProducts, createProducts } from "../apiFrontend/api";
+import Reviews from "./Reviews";
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -11,7 +12,7 @@ const Products = () => {
       };
       fetchProducts();
     }, []);
-
+    console.log(products);
     return (
         <div>
           <h1 className="header">
@@ -39,11 +40,10 @@ const Products = () => {
                 <h1 className="product">
                   {product.price}
                 </h1>
-
-                <h1 className="product">
-                  {product.productImage}
-                </h1>
-
+                
+                <img src={product.productImage} width="300px" height="300px">
+                </img>
+                <Reviews productId = {product.id}/>
               </div>
             ))}
           </div>

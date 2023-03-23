@@ -1,6 +1,6 @@
 const client = require("./client");
 
-async function createReview() {
+async function createReview({productId, userId, title, description, rating, isPublic}) {
    try {
       const {
         rows: [review],
@@ -11,7 +11,7 @@ async function createReview() {
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *
       `,
-        []
+        [productId, userId, title, description, rating, isPublic]
       );
       return review;
     } catch (error) {
@@ -22,7 +22,7 @@ async function createReview() {
 async function getAllReviews() {
    try {
       const { rows: reviews } = await client.query(`
-        SELECT r.*, u.username AS "creatorName"
+        SELECT r.*, u.username AS "username"
         FROM reviews r
         JOIN users u 
         ON u.id = r."userId"
@@ -84,7 +84,13 @@ async function getAllPublicReviewsByUser(username) {
 async function getAllReviewsByProduct(productId) {
    try {
       const reviews = await getAllReviews();
-  
+      const {
+        rows: [review],
+      } = await client.query(`
+        SELECT * FROM products p
+        JOIN reviews r
+        ON r.id = p."productId"
+      `)
       return reviews.filter((review) => review.productId === productId);
     } catch (error) {
       console.log(error);

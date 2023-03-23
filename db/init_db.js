@@ -14,6 +14,7 @@ async function dropTables() {
     await client.query(`
       DROP TABLE IF EXISTS reviews;
       DROP TABLE IF EXISTS "cartItems";
+      DROP TABLE IF EXISTS cartitems;
       DROP TABLE IF EXISTS cart;
       DROP TABLE IF EXISTS users;
       DROP TABLE IF EXISTS products;
@@ -51,9 +52,10 @@ async function buildTables() {
         id SERIAL PRIMARY KEY,
         "userId" INTEGER REFERENCES users(id) NOT NULL
       );
-      CREATE TABLE cartItems(
+      CREATE TABLE "cartItems"(
         id SERIAL PRIMARY KEY,
         "productId" INTEGER REFERENCES products(id) NOT NULL,
+        "productPrice" INTEGER NOT NULL,
         "productQuantity" INTEGER NOT NULL,
         "productImage" TEXT NOT NULL,
         "cartId" INTEGER REFERENCES cart(id) NOT NULL
@@ -84,21 +86,21 @@ async function createInitialProducts() {
         productCategory : "Lolita",
         description : "What's better than a regular top hat? A tiny top hat!",
         price: 20,
-        productImage: "/assets/tinytophat.avif"
+        productImage: "https://i.imgur.com/kAg34JF.png"
       },
       { 
         productName: "Alien Beanie",
         productCategory : "Decora",
         description : "A beanie imported from many light years away. May be sentient!",
         price: 10,
-        productImage: "/assets/alienbeanie.jpg"
+        productImage: "https://i.imgur.com/1T3qteB.png"
       },
       { 
         productName: "Bubblegum Platform Heels",
         productCategory : "Gyaru",
         description : "Platforms as pink as a piece of bubblegum.",
         price: 50,
-        productImage: "/assets/pinkplatformheels.webp"
+        productImage: "https://i.imgur.com/nWS7Qap.png"
       },
     ];
     const products = await Promise.all(productsToCreate.map(createProduct)); //insert route here
@@ -163,26 +165,26 @@ async function createInitialReviews() {
     const reviewsToCreate = [
       {
       productId: 1,
-      userId: 1,
+      userId: 4,
       title: "The perfect fit for my cosplay",
       description: "This top hat works very well for my Skullgirls cosplay! Very sturdy and cute.",
-      rating: 10/10,
+      rating: 10,
       isPublic: true
       },
       { 
       productId: 2,
-      userId: 2,
+      userId: 5,
       title: "Misleading",
       description: "This hat didn't become sentient, so I still don't have a wife :(",
-      rating: 0/10,
+      rating: 0,
       isPublic: true
       },
       { 
       productId: 3,
-      userId: 3,
+      userId: 6,
       title: "OMG",
       description: "LOVE THESE SHOES!! THE COLOR IS SO VIBRANT",
-      rating: 9/10,
+      rating: 9,
       isPublic: true
       },
     ];

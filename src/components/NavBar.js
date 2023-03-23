@@ -32,11 +32,16 @@ const NavBar = (props) => {
             link: "cart",
             path: "/cart",
         },
+        {
+            id: 1,
+            link: "about",
+            path: "/about",
+        },
     ];
     return (
         <div className>
             <div>
-                <h2 className="header">
+                <h2 className="headerNav">
                     HARAJUKU RULEZ!!!
                 </h2>
             </div>
